@@ -1,0 +1,106 @@
+Concurrent Task Dispatcher started
+Scheduling mode: optimized
+Workload: stressed
+Putting task 4 into the queue
+Putting task 8 into the queue
+Putting task 12 into the queue
+Putting task 16 into the queue
+Putting task 20 into the queue
+Putting task 24 into the queue
+Putting task 28 into the queue
+Putting task 1 into the queue
+Putting task 2 into the queue
+Putting task 3 into the queue
+Putting task 6 into the queue
+Putting task 7 into the queue
+Putting task 9 into the queue
+Putting task 11 into the queue
+Putting task 13 into the queue
+Putting task 14 into the queue
+Putting task 17 into the queue
+Putting task 18 into the queue
+Putting task 19 into the queue
+Putting task 21 into the queue
+Putting task 22 into the queue
+Putting task 23 into the queue
+Putting task 26 into the queue
+Putting task 27 into the queue
+Putting task 29 into the queue
+Putting task 5 into the queue
+Putting task 10 into the queue
+Putting task 15 into the queue
+Putting task 25 into the queue
+Putting task 30 into the queue
+Worker 3 running task 4: IO
+Worker 1 running task 8: IO
+Worker 2 running task 12: IO
+Worker 4 running task 16: IO
+Worker 1 finished task 8. Wait: 604.308µs, Turnaround: 250.879163ms
+Worker 4 finished task 16. Wait: 743.368µs, Turnaround: 250.971702ms
+Worker 2 finished task 12. Wait: 646.457µs, Turnaround: 250.962696ms
+Worker 2 running task 24: IO
+Worker 1 running task 20: IO
+Worker 3 finished task 4. Wait: 583.103µs, Turnaround: 250.879671ms
+Worker 4 running task 28: IO
+Worker 3 running task 1: CPU
+Worker 2 finished task 24. Wait: 251.024281ms, Turnaround: 501.111412ms
+Worker 2 running task 2: CPU
+Worker 1 finished task 20. Wait: 250.978469ms, Turnaround: 501.119881ms
+Worker 1 running task 3: CPU
+Worker 4 finished task 28. Wait: 251.038909ms, Turnaround: 501.297884ms
+Worker 4 running task 6: CPU
+Worker 3 finished task 1. Wait: 251.17165ms, Turnaround: 1.151338212s
+Worker 3 running task 7: CPU
+Worker 2 finished task 2. Wait: 501.202703ms, Turnaround: 1.401405626s
+Worker 2 running task 9: CPU
+Worker 1 finished task 3. Wait: 501.293763ms, Turnaround: 1.401405543s
+Worker 1 running task 11: CPU
+Worker 4 finished task 6. Wait: 501.392267ms, Turnaround: 1.40155939s
+Worker 4 running task 13: CPU
+Worker 3 finished task 7. Wait: 1.15140098s, Turnaround: 2.051516256s
+Worker 3 running task 14: CPU
+Worker 2 finished task 9. Wait: 1.401497217s, Turnaround: 2.301673447s
+Worker 2 running task 17: CPU
+Worker 1 finished task 11. Wait: 1.401654377s, Turnaround: 2.301861579s
+Worker 1 running task 18: CPU
+Worker 4 finished task 13. Wait: 1.401688251s, Turnaround: 2.301916201s
+Worker 4 running task 19: CPU
+Worker 3 finished task 14. Wait: 2.051585425s, Turnaround: 2.95169961s
+Worker 3 running task 21: CPU
+Worker 2 finished task 17. Wait: 2.301778984s, Turnaround: 3.201918787s
+Worker 2 running task 22: CPU
+Worker 1 finished task 18. Wait: 2.301932251s, Turnaround: 3.202082049s
+Worker 1 running task 23: CPU
+Worker 4 finished task 19. Wait: 2.302031687s, Turnaround: 3.202178188s
+Worker 4 running task 26: CPU
+Worker 3 finished task 21. Wait: 2.951829833s, Turnaround: 3.851922347s
+Worker 3 running task 27: CPU
+Worker 2 finished task 22. Wait: 3.201995711s, Turnaround: 4.102109675s
+Worker 2 running task 29: CPU
+Worker 1 finished task 23. Wait: 3.202110421s, Turnaround: 4.102281282s
+Worker 1 running task 5: CPU
+Worker 4 finished task 26. Wait: 3.202209817s, Turnaround: 4.102400324s
+Worker 4 running task 10: CPU
+Worker 3 finished task 27. Wait: 3.851980686s, Turnaround: 4.752091815s
+Worker 3 running task 15: CPU
+Worker 2 finished task 29. Wait: 4.102217517s, Turnaround: 5.002338163s
+Worker 2 running task 25: CPU
+Worker 1 finished task 5. Wait: 4.102348858s, Turnaround: 5.502454443s
+Worker 1 running task 30: CPU
+Worker 4 finished task 10. Wait: 4.102429519s, Turnaround: 5.502523835s
+Worker 4 has no more tasks, shutting down
+Worker 3 finished task 15. Wait: 4.752172304s, Turnaround: 6.152292145s
+Worker 3 has no more tasks, shutting down
+Worker 2 finished task 25. Wait: 5.002423853s, Turnaround: 6.402557977s
+Worker 2 has no more tasks, shutting down
+Worker 1 finished task 30. Wait: 5.502545053s, Turnaround: 6.902656378s
+Worker 1 has no more tasks, shutting down
+
+===== Metrics =====
+Total tasks completed: 30
+CPU tasks completed: 23
+IO tasks completed: 7
+Makespan: 6.902912879s
+Average wait time: 2.026617067s
+Average turnaround time: 2.858446856s
+Max wait time: 5.502545053s
