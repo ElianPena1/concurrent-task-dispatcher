@@ -75,11 +75,13 @@ The program has a few main parts:
 - worker threads
 - final metrics
 
-The task maker creates tasks with an ID, a type, a run time, and the time it was created.
+The task maker creates each task with a number, a type, how long it should run, and when it was made
 
-After that, each task gets placed into a shared queue. I used `VecDeque` for the queue because it lets me add tasks to the back and remove them from the front.
+Then the task is put into a shared queue, and I used `VecDeque` because it makes it easy to add tasks to the back and take tasks from the front
 
-There are 4 worker threads. Each worker tries to take a task from the queue. If it gets one, it runs the task by sleeping for that task’s time. After that, it updates the metrics. If the queue is empty, the worker stops.
+There are 4 workers, and each worker takes a task from the queue, runs it, and updates the final results
+
+If there are no tasks left, the worker stops
 
 ## Shared Data
 
@@ -89,11 +91,11 @@ The queue is shared by all workers:
 Arc<Mutex<VecDeque<Task>>>
 ```
 
-I used `Arc` so more than one worker can access the same queue.
+I used `Arc` so the 4 workers can all share the same queue
 
-I used `Mutex` so only one worker can use the queue at a time. Without that, two workers could try to take the same task or change the queue at the same time.
+I used `Mutex` so only one worker can mess with the queue at one time, that way two workers do not grab the same task by accident
 
-The metrics are also shared because every worker needs to update the final results.
+The metrics are shared too because all the workers need to add their results when they finish a task
 
 ## Scheduling
 
@@ -101,15 +103,15 @@ The project has two scheduling modes.
 
 ### FIFO
 
-FIFO runs tasks in the order they were added.
+FIFO runs the tasks in the same order they were put into the queue
 
-This is simple and easy to understand. The downside is that a short task can get stuck waiting behind a long task.
+I used this because it is simple and easy to follow, but one problem is that a short task might have to wait behind a longer task
 
 ### Optimized
 
-Optimized sorts the tasks so the shorter ones go first.
+Optimized puts the shorter tasks first
 
-This can make the average wait time better because smaller tasks finish sooner. The downside is that longer tasks might wait more.
+I used this to try to lower the wait time, since smaller tasks can finish faster, but the downside is that longer tasks might have to wait more
 
 ## Workloads
 
@@ -132,6 +134,7 @@ The program prints:
 - average wait time
 - average turnaround time
 - max wait time
+- worker utilization
 
 ## Experiments
 
@@ -157,29 +160,26 @@ This run uses the optimized mode with a harder workload. The stressed workload h
 
 The main thing I am comparing is how long the program takes and how the wait times change.
 
+The full printed results are saved in `experiment_fifo_balanced.txt` and `experiment_optimized_stressed.txt`.
+
 ## Clean Shutdown
 
-The workers stop when the queue is empty. In the code, this happens when `pop_front()` returns `None`.
+The workers stop when there are no tasks left in the queue
 
-After that, the worker breaks out of its loop. The main thread then waits for all workers to finish using `join()`.
+In the code, this happens when `pop_front()` gives back `None`, then the worker leaves the loop
 
-## Bug or Issue I Hit
+After all the workers stop, the main thread uses `join()` to wait for them before the program ends
 
-One issue I had was with workers stopping correctly. At first, I had to make sure the workers would not keep running forever after all tasks were done.
-
-I fixed this by checking if the queue was empty. If there was no task left, the worker prints that it is shutting down and exits the loop.
-
-Another small issue was Rust warning me that some task fields were not being used. That happened early on before I added timing and metrics. Once I used `time_needed` and `created_at`, that warning made sense and was fixed.
 
 ## Tool Use Disclosure
 
-I used ChatGPT to help break the project into smaller steps and understand what the project was asking for.
+I used ChatGPT for small help with checking requirements and formatting the README.
 
-It helped me with ideas for the queue, worker threads, and how to explain `Arc` and `Mutex`.
+I also used it to explain how some parts of the code worked, like the task maker, the queue, the workers, and the metrics.
 
-One suggestion I accepted was using a shared queue with 4 worker threads because it matched the project requirements.
+One suggestion I accepted was using one shared queue with 4 worker threads. I used this because the project needed a queue and a worker pool, and this setup was simple enough for me to follow. The queue holds the tasks, and the workers take tasks from the queue until there are no tasks left.
 
-One suggestion I changed was making the scheduler too complicated. I kept it simpler so I could explain it better during the demo.
+One suggestion I changed was making the scheduler too complicated. At first, there were ideas like using more advanced scheduling rules, but I did not want to add something I could not explain well. I kept the scheduler a little simple with FIFO and shorter-tasks-first, so I could understand what the code was doing and explain it during the demo.
 
 ## Files Included
 

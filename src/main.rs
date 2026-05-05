@@ -26,27 +26,28 @@ struct Metrics {
     total_wait: Duration,
     total_turnaround: Duration,
     max_wait: Duration,
+    total_work_time: Duration,
 }
 
 fn make_tasks(workload: &str) -> Vec<Task> {
     let mut tasks = Vec::new();
 
     if workload == "stressed" {
-        // stressed workload: mostly CPU tasks with uneven times
-        for i in 1..=30 {
+        // stressed workload => mostly CPU tasks with uneven times
+        for i in 1..=500 {
             let kind;
             let time_needed;
 
-            if i % 4 == 0 {
+            if i % 5 == 0 {
                 kind = TaskType::IO;
-                time_needed = Duration::from_millis(250);
+                time_needed = Duration::from_millis(15);
             } else {
                 kind = TaskType::CPU;
 
-                if i % 5 == 0 {
-                    time_needed = Duration::from_millis(1400);
+                if i % 10 == 0 {
+                    time_needed = Duration::from_millis(90);
                 } else {
-                    time_needed = Duration::from_millis(900);
+                    time_needed = Duration::from_millis(45);
                 }
             }
 
@@ -56,19 +57,22 @@ fn make_tasks(workload: &str) -> Vec<Task> {
                 time_needed,
                 created_at: Instant::now(),
             });
+
+            // small delay so tasks doesn't all arrive at the same time
+            thread::sleep(Duration::from_millis(1));
         }
     } else {
-        // balanced workload: half CPU and half IO
-        for i in 1..=20 {
+        // balanced workload => mixed CPU and IO tasks
+        for i in 1..=500 {
             let kind;
             let time_needed;
 
             if i % 2 == 0 {
                 kind = TaskType::CPU;
-                time_needed = Duration::from_millis(800);
+                time_needed = Duration::from_millis(40);
             } else {
                 kind = TaskType::IO;
-                time_needed = Duration::from_millis(300);
+                time_needed = Duration::from_millis(20);
             }
 
             tasks.push(Task {
@@ -77,6 +81,9 @@ fn make_tasks(workload: &str) -> Vec<Task> {
                 time_needed,
                 created_at: Instant::now(),
             });
+
+            // small delay so tasks doesn't all arrive at the exact same time
+            thread::sleep(Duration::from_millis(1));
         }
     }
 
@@ -100,15 +107,19 @@ fn main() {
         String::from("balanced")
     };
 
+    let worker_count = 4;
+
     println!("Scheduling mode: {}", mode);
     println!("Workload: {}", workload);
+    println!("Worker count: {}", worker_count);
+    println!("Total tasks created: 500");
 
     let start_time = Instant::now();
 
-    // shared queue
+    // shared queue for all workers
     let queue = Arc::new(Mutex::new(VecDeque::new()));
 
-    // shared metrics
+    // shared metrics so workers can update final results
     let metrics = Arc::new(Mutex::new(Metrics {
         total_done: 0,
         cpu_done: 0,
@@ -116,6 +127,7 @@ fn main() {
         total_wait: Duration::from_millis(0),
         total_turnaround: Duration::from_millis(0),
         max_wait: Duration::from_millis(0),
+        total_work_time: Duration::from_millis(0),
     }));
 
     let mut tasks = make_tasks(&workload);
@@ -126,14 +138,12 @@ fn main() {
     }
 
     for task in tasks {
-        println!("Putting task {} into the queue", task.id);
         queue.lock().unwrap().push_back(task);
     }
 
-    let worker_count = 4;
     let mut handles = Vec::new();
 
-    for worker_id in 1..=worker_count {
+    for _worker_id in 1..=worker_count {
         let queue_clone = Arc::clone(&queue);
         let metrics_clone = Arc::clone(&metrics);
 
@@ -150,12 +160,6 @@ fn main() {
                         let started_at = Instant::now();
                         let wait_time = started_at.duration_since(task.created_at);
 
-                        println!(
-                            "Worker {} running task {}: {:?}",
-                            worker_id, task.id, task.kind
-                        );
-
-                        // this simulates the task running
                         thread::sleep(task.time_needed);
 
                         let finished_at = Instant::now();
@@ -167,6 +171,7 @@ fn main() {
                             m.total_done += 1;
                             m.total_wait += wait_time;
                             m.total_turnaround += turnaround;
+                            m.total_work_time += task.time_needed;
 
                             if wait_time > m.max_wait {
                                 m.max_wait = wait_time;
@@ -177,14 +182,9 @@ fn main() {
                                 TaskType::IO => m.io_done += 1,
                             }
                         }
-
-                        println!(
-                            "Worker {} finished task {}. Wait: {:?}, Turnaround: {:?}",
-                            worker_id, task.id, wait_time, turnaround
-                        );
                     }
                     None => {
-                        println!("Worker {} has no more tasks, shutting down", worker_id);
+                        // no task left, so this worker can stop
                         break;
                     }
                 }
@@ -220,4 +220,13 @@ fn main() {
     }
 
     println!("Max wait time: {:?}", m.max_wait);
+
+    // worker utilization = actual work time divided by possible worker time
+    let total_possible_work_time = makespan.as_secs_f64() * worker_count as f64;
+    let actual_work_time = m.total_work_time.as_secs_f64();
+
+    if total_possible_work_time > 0.0 {
+        let worker_utilization = (actual_work_time / total_possible_work_time) * 100.0;
+        println!("Worker utilization: {:.2}%", worker_utilization);
+    }
 }

@@ -1,76 +1,15 @@
 Concurrent Task Dispatcher started
 Scheduling mode: fifo
 Workload: balanced
-Putting task 1 into the queue
-Putting task 2 into the queue
-Putting task 3 into the queue
-Putting task 4 into the queue
-Putting task 5 into the queue
-Putting task 6 into the queue
-Putting task 7 into the queue
-Putting task 8 into the queue
-Putting task 9 into the queue
-Putting task 10 into the queue
-Putting task 11 into the queue
-Putting task 12 into the queue
-Putting task 13 into the queue
-Putting task 14 into the queue
-Putting task 15 into the queue
-Putting task 16 into the queue
-Putting task 17 into the queue
-Putting task 18 into the queue
-Putting task 19 into the queue
-Putting task 20 into the queue
-Worker 1 running task 1: IO
-Worker 3 running task 2: CPU
-Worker 2 running task 3: IO
-Worker 4 running task 4: CPU
-Worker 1 finished task 1. Wait: 1.644472ms, Turnaround: 301.957169ms
-Worker 1 running task 5: IO
-Worker 2 finished task 3. Wait: 2.429227ms, Turnaround: 302.521293ms
-Worker 2 running task 6: CPU
-Worker 1 finished task 5. Wait: 302.033422ms, Turnaround: 602.139994ms
-Worker 1 running task 7: IO
-Worker 3 finished task 2. Wait: 2.31847ms, Turnaround: 802.488037ms
-Worker 3 running task 8: CPU
-Worker 4 finished task 4. Wait: 2.621746ms, Turnaround: 802.764503ms
-Worker 4 running task 9: IO
-Worker 1 finished task 7. Wait: 602.204835ms, Turnaround: 902.325985ms
-Worker 1 running task 10: CPU
-Worker 2 finished task 6. Wait: 302.571867ms, Turnaround: 1.102811247s
-Worker 2 running task 11: IO
-Worker 4 finished task 9. Wait: 802.803115ms, Turnaround: 1.102910059s
-Worker 4 running task 12: CPU
-Worker 2 finished task 11. Wait: 1.102866802s, Turnaround: 1.402951985s
-Worker 2 running task 13: IO
-Worker 3 finished task 8. Wait: 802.578656ms, Turnaround: 1.602678623s
-Worker 3 running task 14: CPU
-Worker 1 finished task 10. Wait: 902.396457ms, Turnaround: 1.702478831s
-Worker 1 running task 15: IO
-Worker 2 finished task 13. Wait: 1.403036131s, Turnaround: 1.703135861s
-Worker 2 running task 16: CPU
-Worker 4 finished task 12. Wait: 1.102923904s, Turnaround: 1.903002791s
-Worker 4 running task 17: IO
-Worker 1 finished task 15. Wait: 1.702560624s, Turnaround: 2.003522955s
-Worker 1 running task 18: CPU
-Worker 4 finished task 17. Wait: 1.903075718s, Turnaround: 2.203185768s
-Worker 4 running task 19: IO
-Worker 3 finished task 14. Wait: 1.60275728s, Turnaround: 2.402873346s
-Worker 3 running task 20: CPU
-Worker 2 finished task 16. Wait: 1.703164986s, Turnaround: 2.503277496s
-Worker 2 has no more tasks, shutting down
-Worker 4 finished task 19. Wait: 2.203261419s, Turnaround: 2.503443603s
-Worker 4 has no more tasks, shutting down
-Worker 1 finished task 18. Wait: 2.003566126s, Turnaround: 2.80365773s
-Worker 1 has no more tasks, shutting down
-Worker 3 finished task 20. Wait: 2.403069873s, Turnaround: 3.203230964s
-Worker 3 has no more tasks, shutting down
+Worker count: 4
+Total tasks created: 500
 
 ===== Metrics =====
-Total tasks completed: 20
-CPU tasks completed: 10
-IO tasks completed: 10
-Makespan: 3.203483856s
-Average wait time: 1.042694256s
-Average turnaround time: 1.592867912s
-Max wait time: 2.403069873s
+Total tasks completed: 500
+CPU tasks completed: 250
+IO tasks completed: 250
+Makespan: 4.340677327s
+Average wait time: 2.148690504s
+Average turnaround time: 2.178931801s
+Max wait time: 3.756921446s
+Worker utilization: 86.39%
