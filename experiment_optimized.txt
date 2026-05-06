@@ -1,0 +1,14 @@
+== Optimized simulation ==
+1000 tasks, 70% IO / 30% CPU, 8 workers, cap 100%
+
+— results —
+total runtime          : 4246 ms
+makespan               : 4246 ms
+tasks completed        : 1000 (CPU=300, IO=700)
+avg wait time          : 1646 ms
+avg turnaround time    : 1672 ms
+avg wait (IO only)     : 1191 ms
+avg wait (CPU only)    : 2710 ms
+max wait time          : 3864 ms
+avg CPU usage          : 73.66 %
+avg workers active     : 5.89 / 8
